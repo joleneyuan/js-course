@@ -4,7 +4,24 @@
 //================================================================
 // Coding Challenge #3
 
+var bills = [124, 48, 268];
+console.log("bills: " + bills);
 
+function calcTips (bill) {
+    if (bill < 50) {
+        return console.log(bill*0.2);
+    } else if (bill>200) {
+        return bill*0.1;
+    } else {
+        return bill*0.15;
+    }
+}
+
+var tips = bills.forEach((bill) => calcTips(bill));
+console.log("tips: " + tips);
+
+var totals = bills.map((t, i) => t + tips[i]);
+console.log("totals: " + totals);
 
 //================================================================
 // Arrays
@@ -48,7 +65,8 @@
 
 // var teams = [
 //     new Team('John', [89, 120, 103]),
-//     new Team('Mike', [116, 94, 123])
+//     new Team('Mike', [116, 94, 123]),
+//     new Team('Mike2', [97, 134, 105])
 // ]
 
 // function calcAvg (scores) {
@@ -64,12 +82,15 @@
 
 // // my soln
 // function highestAvg (teams) {
-//     var highestName = 'No teams available';
+//     var highestName = [];
 //     var currHighestAvg = 0;
 //     for (let i=0; i<teams.length; i++) {
 //         if (teams[i].avg > currHighestAvg) {
 //             currHighestAvg = teams[i].avg;
-//             highestName = teams[i].name;
+//             highestName.length = 0;
+//             highestName.push(teams[i].name);
+//         } else if (teams[i].avg == currHighestAvg) {
+//             highestName.push(teams[i].name);
 //         }
 //     }
 //     return highestName;
