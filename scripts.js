@@ -9,18 +9,21 @@ console.log("bills: " + bills);
 
 function calcTips (bill) {
     if (bill < 50) {
-        return console.log(bill*0.2);
+        return (bill*0.2).toFixed(2);
     } else if (bill>200) {
-        return bill*0.1;
+        return (bill*0.1).toFixed(2);
     } else {
-        return bill*0.15;
+        return (bill*0.15).toFixed(2);
     }
 }
 
-var tips = bills.forEach((bill) => calcTips(bill));
+var tips = [];
+bills.forEach((bill) => {
+    tips.push(calcTips(bill));
+});
 console.log("tips: " + tips);
 
-var totals = bills.map((t, i) => t + tips[i]);
+var totals = bills.map((t, i) => (parseFloat(t) + parseFloat(tips[i])).toFixed(2));
 console.log("totals: " + totals);
 
 //================================================================
