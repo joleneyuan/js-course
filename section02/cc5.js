@@ -60,11 +60,25 @@ var bills = [
     new Bill("Mark", [77, 375, 110, 45], [0.2, 100, 0.1, 300, 0.25])
 ]
 
+
+var highestTipper = ['no one'];
+var highestTip = 0;
+
 for (let bill of bills) {
+    
     for (let detail in bill) {
         console.log(detail + ": " + bill[detail]);
     }
+    if (highestTip < bill.tipsAvg) {
+        highestTip = bill.tipsAvg;
+        highestTipper.length = 0;
+        highestTipper.push(bill.name);
+    } else if (highestTipper = bill.tipsAvg) {
+        highestTipper.push(bill.name);
+    }
     console.log("\n");
 }
+
+console.log("Highest avg tipper is " + highestTipper + " with an avg tip of " + highestTip);
 
 //================================================================
