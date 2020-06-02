@@ -6,10 +6,10 @@ console.log("Coding Challenge #5\n\n");
 
 // part 1
 
-function Bill(name, bills) {
+function Bill(name, bills, tipRates) {
     this.name = name;
     this.bills = bills;
-    this.tips = calcTips(bills);
+    this.tips = calcTips(bills, tipRates);
     this.totals = calcTotals(bills, this.tips);
     // this.totals = function () {
     //     return bills.map((t, i) => (parseFloat(t) + parseFloat(this.tips[i])).toFixed(2));
@@ -17,8 +17,8 @@ function Bill(name, bills) {
     this.tipsAvg = calcAvg(this.tips); // part 2
 }
 
-function calcTips(bills) {
-    return bills.map( t => calcTip(t).toFixed(2));
+function calcTips(bills, tipRates) {
+    return bills.map( t => calcTip(t, tipRates).toFixed(2));
 }
 
 function calcTotals(bills, tips) {
@@ -40,27 +40,24 @@ function calcTotals(bills, tips) {
 // console.log(JosBill);
 // console.log(JosBill.totals(JosBill.bills, JosBill.tips)); // without the brackets, it'd go back to being a string
 
-// seong's soln
-// const seongIsAwesome = new Bill('haha', [1,2,3]);
-// console.log(seongIsAwesome.totals());
-
 function calcAvg(tips) {
     return (tips.reduce((s,t) => s+parseFloat(t), 0) / tips.length).toFixed(2);
 }
 
-function calcTip(bill) {
-    if (bill < 50) {
-        return bill*0.2;
-    } else if (bill > 200) {
-        return bill*0.1;
+// tipRates is of the format [low-rate, low-cutoff, mid-rate, high-cutoff, high-rate]
+function calcTip(bill, tipRates) {
+    if (bill < tipRates[1]) {
+        return bill*tipRates[0];
+    } else if (bill > [3]) {
+        return bill*tipRates[4];
     } else {
-        return bill*0.15;
+        return bill*tipRates[2];
     }
 }
 
 var bills = [
-    new Bill("John", [124, 48, 268, 180, 42]),
-    new Bill("Mark", [77, 375, 110, 45])
+    new Bill("John", [124, 48, 268, 180, 42], [0.2, 50, 0.15, 200, 0.1]),
+    new Bill("Mark", [77, 375, 110, 45], [0.2, 100, 0.1, 300, 0.25])
 ]
 
 for (let bill of bills) {

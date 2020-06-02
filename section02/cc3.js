@@ -22,6 +22,8 @@ console.log("tips: " + tips);
 var totals = bills.map((t, i) => (parseFloat(t) + parseFloat(tips[i])).toFixed(2));
 console.log("totals: " + totals);
 
+console.log("--------------");
+
 //================================================================
 // Arrays
 
