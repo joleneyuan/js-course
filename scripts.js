@@ -1,30 +1,107 @@
 //The Complete JavaScript Course 2020
 
+//================================================================
+// Coding Challenge #5
+
+// part 1
+
+// function Bill(name, bills) {
+//     this.name = name;
+//     this.bills = bills;
+//     this.tips = calcTips(bills);
+//     // this.totals = calcTotals(bills, this.tips);
+//     this.totals = function () {
+//         return bills.map((t, i) => (parseFloat(t) + parseFloat(tips[i])).toFixed(2));
+//     }
+//     this.tipsAvg = calcAvg(this.tips); // part 2
+// }
+
+// function calcTips(bills) {
+//     return bills.map( t => calcTip(t).toFixed(2));
+// }
+
+// // function calcTotals(bills, tips) {
+// //     return bills.map((t, i) => (parseFloat(t) + parseFloat(tips[i])).toFixed(2));
+// // }
+
+// function calcAvg(tips) {
+//     return (tips.reduce((s,t) => s+parseFloat(t), 0) / tips.length).toFixed(2);
+// }
+
+// function calcTip(bill) {
+//     if (bill < 50) {
+//         return bill*0.2;
+//     } else if (bill > 200) {
+//         return bill*0.1;
+//     } else {
+//         return bill*0.15;
+//     }
+// }
+
+// var bills = [
+//     new Bill("John", [124, 48, 268, 180, 42]),
+//     new Bill("Mark", [77, 375, 110, 45])
+// ]
+
+// for (let bill of bills) {
+//     for (let detail in bill) {
+//         console.log(detail + ": " + bill[detail]);
+//     }
+//     console.log("\n");
+// }
+
+//================================================================
+// Coding Challenge #4
+
+// function Person(name, mass, height) {
+//     this.name = name;
+//     this.mass = mass;
+//     this.height = height;
+//     this.bmi = mass/height/height;
+// }
+
+// var people = [
+//     new Person("Mark", 75.0, 1.8),
+//     new Person("John", 86.0, 1.78)
+// ]
+
+// function highestBMI (people) {
+//     var recordBMI = 0;
+//     var recordPeople = ['no one'];
+//     for (let person of people) {
+//         if (person.bmi > recordBMI) {
+//             recordBMI = person.bmi;
+//             recordPeople.length = 0;
+//             recordPeople.push(person.name);
+//         } else if (person.bmi == recordBMI) {
+//             recordPeople.push(person.name);
+//         }
+//     }
+//     return [recordBMI, recordPeople];
+// }
+
+// console.log("Highest BMI goes to " + highestBMI(people)[1] + " with a BMI of " + highestBMI(people)[0].toFixed(2));
 
 //================================================================
 // Coding Challenge #3
 
-var bills = [124, 48, 268];
-console.log("bills: " + bills);
+// var bills = [124, 48, 268];
+// console.log("bills: " + bills);
 
-function calcTips (bill) {
-    if (bill < 50) {
-        return (bill*0.2).toFixed(2);
-    } else if (bill>200) {
-        return (bill*0.1).toFixed(2);
-    } else {
-        return (bill*0.15).toFixed(2);
-    }
-}
+// function calcTips (bill) {
+//     if (bill < 50) {
+//         return (bill*0.2).toFixed(2);
+//     } else if (bill > 200) {
+//         return (bill*0.1).toFixed(2);
+//     } else {
+//         return (bill*0.15).toFixed(2);
+//     }
+// }
 
-var tips = [];
-bills.forEach((bill) => {
-    tips.push(calcTips(bill));
-});
-console.log("tips: " + tips);
-
-var totals = bills.map((t, i) => (parseFloat(t) + parseFloat(tips[i])).toFixed(2));
-console.log("totals: " + totals);
+// var tips = bills.map( t => calcTips(t));
+// console.log("tips: " + tips);
+// var totals = bills.map((t, i) => (parseFloat(t) + parseFloat(tips[i])).toFixed(2));
+// console.log("totals: " + totals);
 
 //================================================================
 // Arrays
