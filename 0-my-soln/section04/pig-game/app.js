@@ -68,8 +68,8 @@ function winner(activePlayer) {
         document.getElementById('name-' + activePlayer).textContent = 'WINNER!';
         document.getElementsByClassName('player-' + activePlayer + '-panel')[0].classList.toggle('winner');
         gameEnd = true;
-        return gameEnd;
     }
+    return gameEnd;
 }
 
 function rollDices() {
