@@ -9,85 +9,8 @@ GAME RULES:
 
 */
 
-var scores=[0,0], roundScore=0, activePlayer=0;
-var roundScoreDOM, winnerScoreDOM=document.getElementById('final-score');
-winnerScoreDOM.value = 100; // default winning score
-
-
-init();
-
-function init() {
-    // clear dice
-    document.querySelector('.dice').style.display = 'none';
-
-    // clear scores
-    for (let i=0; i<scores.length; i++) {
-        document.getElementById('score-' + i).textContent = 0;
-        document.getElementById('current-' + i).textContent = 0;
-        document.getElementById('name-' + i).textContent = 'Player ' + i;
-        document.getElementsByClassName('player-' + i + '-panel')[0].classList.remove('winner');
-        scores[i] = 0;
-    }
-
-    // reset active player
-    activePlayer = 0;
-    document.querySelector('.player-0-panel').classList.add('active');
-    document.querySelector('.player-1-panel').classList.remove('active');
-}
-
-function switchPlayer() {
-    roundScore = 0;
-    document.getElementById('current-0').textContent = '0';
-    document.getElementById('current-1').textContent = '0';
-
-    // document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
-    activePlayer===0 ? activePlayer=1 : activePlayer=0;
-    // document.querySelector('.player-' + activePlayer + '-panel').classList.add('active');
-
-    document.querySelector('.player-0-panel').classList.toggle('active');
-    document.querySelector('.player-1-panel').classList.toggle('active');
-}
-
-function winner(activePlayer) {
-    console.log('final:' + winnerScoreDOM.value);
-    if (winnerScoreDOM.value <= scores[activePlayer]) {
-        document.getElementById('name-' + activePlayer).textContent = 'WINNER!';
-        document.getElementsByClassName('player-' + activePlayer + '-panel')[0].classList.toggle('winner');
-        return true;
-    }
-}
-
-function btnRoll() {
-    console.log('mouse clicked');
-
-    // 1. Generate random number
-    var dice = Math.floor(Math.random() * 6) + 1;
-
-    // 2. Display result
-    var diceDOM = document.querySelector('.dice');
-    diceDOM.style.display = 'block';
-    diceDOM.src = 'dice-' + dice + '.png';
-
-    // 3. Update round score only if rolled number is NOT 1
-    if (dice !== 1) {
-        roundScoreDOM = document.getElementById('current-' + activePlayer);
-        roundScore += dice;
-        roundScoreDOM.textContent = roundScore;
-    } else {
-        switchPlayer();
-    }
-}
-
-function btnHold() {
-    // add roundScore to totalScore
-    scores[activePlayer] += roundScore;
-    document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
-
-    // check winner
-    if (!winner(activePlayer)) {
-        switchPlayer();
-    }
-}
+var scores, roundScore, activePlayer, dices, gameEnd, prevRoll;
+var winnerScoreDOM = document.getElementById('final-score');
 
 document.getElementsByClassName('btn-roll')[0].addEventListener('click', btnRoll);
 // different approach of selecting the element with this class -> need [0] cause this returns array
@@ -98,6 +21,107 @@ document.querySelector('.btn-hold').addEventListener('click', btnHold);
 // tutorial way of getting to this element
 
 document.querySelector('.btn-new').addEventListener('click', init);
+
+init();
+
+function init() {
+    // initialize
+    scores = [0,0];
+    dices = [0,0];
+    prevRoll = [0,0];
+    gameEnd = false;
+    winnerScoreDOM.value = 100; // default winning score
+
+    // clear scores
+    roundScore = 0;
+    for (let i=0; i<scores.length; i++) {
+        document.getElementById('score-' + i).textContent = roundScore;
+        document.getElementById('current-' + i).textContent = roundScore;
+        document.getElementById('name-' + i).textContent = 'Player ' + i;
+        document.getElementsByClassName('player-' + i + '-panel')[0].classList.remove('winner');
+        scores[i] = roundScore;
+        document.querySelectorAll('.dice')[i].style.display = 'none';
+    }
+
+    // reset active player
+    activePlayer = 0;
+    document.querySelector('.player-0-panel').classList.add('active');
+    document.querySelector('.player-1-panel').classList.remove('active');
+}
+
+function switchPlayer() {
+    roundScore = 0;
+    prevRoll = [0,0];
+    document.getElementById('current-0').textContent = roundScore;
+    document.getElementById('current-1').textContent = roundScore;
+
+    activePlayer===0 ? activePlayer=1 : activePlayer=0;
+
+    document.querySelector('.player-0-panel').classList.toggle('active');
+    document.querySelector('.player-1-panel').classList.toggle('active');
+    document.querySelectorAll('.dice')[0].style.display = 'none';
+    document.querySelectorAll('.dice')[1].style.display = 'none';
+}
+
+function winner(activePlayer) {
+    if (winnerScoreDOM.value <= scores[activePlayer]) {
+        document.getElementById('name-' + activePlayer).textContent = 'WINNER!';
+        document.getElementsByClassName('player-' + activePlayer + '-panel')[0].classList.toggle('winner');
+        gameEnd = true;
+        return gameEnd;
+    }
+}
+
+function rollDices() {
+    for (let i=0; i<dices.length; i++) {
+        dices[i] = Math.floor(Math.random() * 6) + 1;
+        let diceDOM = document.querySelector('#dice-'+i);
+        diceDOM.style.display = 'block';
+        diceDOM.src = 'dice-' + dices[i] + '.png';
+    }
+    // dices[1] = 6;  // this is to 
+    // document.querySelector('#dice-1').src = 'dice-6.png';
+}
+
+function btnRoll() {
+    if (!gameEnd) {
+        rollDices();
+        console.log("prev:" + prevRoll);
+        console.log("curr:" + dices);
+
+        if (prevRoll.includes(6) && dices.includes(6)) {
+            console.log("here");
+            // clear scores
+            roundScore = 0;
+            scores[activePlayer] = 0;
+            document.getElementById('current-' + activePlayer).textContent = roundScore;
+            document.getElementById('score-' + activePlayer).textContent = roundScore;
+    
+            // switch player
+            switchPlayer();
+        } else if (dices[0] !== 1 && dices[1] !== 1) { // Update round score only if rolled number is NOT 1
+            roundScore += dices[0] + dices[1];
+            document.getElementById('current-' + activePlayer).textContent = roundScore;
+            prevRoll = dices.slice(0);
+        } else {
+            switchPlayer();
+        }
+    }
+}
+
+function btnHold() {
+    if (!gameEnd) {
+        // add roundScore to totalScore
+        scores[activePlayer] += roundScore;
+        document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
+
+        // check winner
+        if (!winner(activePlayer)) {
+            switchPlayer();
+        }
+    }
+}
+
 
 
 
