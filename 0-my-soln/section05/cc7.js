@@ -1,138 +1,97 @@
-// section 5
+/////////////////////////////
+// CODING CHALLENGE #7
 
-// lecture notes
+
 /*
+--- Let's build a fun quiz game in the console! ---
 
-- Primitives (Numbers, Strings, Boolean, Undefined, Null)
-- Everything else is an object
+1. Build a function constructor called Question to describe a question. A question should include:
+a) question itself
+b) the answers from which the player can choose the correct one (choose an adequate data structure here, array, object, etc.)
+c) correct answer (I would use a number for this)
 
-OOP in JS:
-* Constructor (like java class; eg. Person)
-* Inheritance (eg. Person -> Athlete)
-* Prototype-based language:
-    - Every JS object has a prototype property, which makes inheritance possible
-    - Prototype property of an object is where we put methods and properties that
-       other objects can inherit
-    - Constructor's prototype property is not the prototype of the Constructor 
-       itself, but the prototype of ALL instances that are created through it
-    - when a certain method/property is called, search starts at the object, then 
-       moves up to the object's prototype till method/property is found
-    - "prototype chain": eg. john -> Person -> Object -> null (return undefined)
-    
+2. Create a couple of questions using the constructor
 
+3. Store them all inside an array
+
+4. Select one random question and log it on the console, together with the possible answers (each question should have a number) (Hint: write a method for the Question objects for this task).
+
+5. Use the 'prompt' function to ask the user for the correct answer. The user should input the number of the correct answer such as you displayed it on Task 4.
+
+6. Check if the answer is correct and print to the console whether the answer is correct ot nor (Hint: write another method for this).
+
+7. Suppose this code would be a plugin for other programmers to use in their code. So make sure that all your code is private and doesn't interfere with the other programmers code (Hint: we learned a special technique to do exactly that).
 */
 
-
-// Function Constructor
-
-// example
-
-// ES2015
-// class Person {
-//     constructor(name, birthYear, job) {
-//         this.name = name;
-//         this.birthYear = birthYear;
-//         this.job = job;
-//         this.calculateAge = function () {
-//             console.log(2020 - this.birthYear);
-//         };
-//     }
-// }
-
-var Person = function(name, birthYear, job) {
-    this.name = name;
-    this.birthYear = birthYear;
-    this.job = job;
-    // this.calculateAge = function() {
-    //     console.log(2020 - this.birthYear);
-    // }
-}
-
-// another way to define protetypes
-// look a bit different in console
-Person.prototype.calculateAge = function(year) {
-    console.log(year - this.birthYear);
-}
-
-var john = new Person('john', 1990, 'teacher');
-john.calculateAge(2020);
-
-// john instanceof Object -> true
-// john instanceof Person -> true
-// Person instanceof Object -> true
-// therefore, john.hasOwnProperty('job') -> true, even though hasOwnProperty() is method of Object
-
-var personProto = {
-    calculateAge: function(year) {
-        console.log(year - this.birthYear);
+(function() { // this satisfies condition #7
+    function Question(question, choices, correctAns) {
+        this.question = question;
+        this.choices = choices;
+        this.correctAns = correctAns;
+        this.selectQuestion = function() {
+            console.log(this.question);
+            for (let choice of choices) {
+                console.log(choice);
+            }
+        };
+        this.checkAnswer = function(ans, scoreTracker) {
+            while (parseInt(ans) !== this.correctAns && ans !== 'exit') {
+                if (!Number.isInteger(parseInt(ans))) {
+                    console.log('Invalid input');
+                } else {
+                    console.log('Wrong answer');
+                }
+                console.log('Please try again');
+                ans = prompt('Please select correct answer: ');
+            }
+            if (this.correctAns === parseInt(ans)) {
+                console.log("Correct!");
+                scoreTracker(true);
+                init();
+            } else if (ans === 'exit') {
+                console.log('Goodbye');
+            }
+        };
     }
-}
 
-var jane = Object.create(personProto, {
-    name: { value: 'jane'},
-    birthYear: { value: 1989 },
-    job: { value: 'developer' }
-}); 
+    // closure + callback for #9 + #10
+    var keepScore = scoreTracker();
+    function scoreTracker() {
+        var sc = 0;
+        return function(correct) {
+            if (correct) {
+                sc++;
+            }
+            console.log('Total score is: ' + sc);
+            return sc;
+        }
+    }
+
+    function init() {
+        var rand = Math.floor(Math.random() * questions.length);
+        questions[rand].selectQuestion();
+        var playerAns = prompt('Please select correct answer: ');
+        questions[rand].checkAnswer(playerAns, keepScore);
+    }
+    
+    var questions = [
+        new Question("Name of instructor?", ['Jonas', 'Mark', 'Sam'], 0),
+        new Question("Highest temperature today?", [25, 36, 42], 2),
+        new Question("Are you happy?", ['Yes', 'No'], 0)
+    ];
+    
+    init();
+})();
+
 
 /*
-Difference between Object.create and Function Constructor is 
-that Object.create inherits directly from the one that we passed
-into the first argument, whereas a newly created object using
-Function Constructor inherits from the constructor's prototype
-property.
+--- Expert level ---
 
-john -> Person {name: "john", birthYear: 1990, job: "teacher"}
-jane -> {name: "jane", birthYear: 1989, job: "developer"}
+8. After you display the result, display the next random question, so that the game never ends (Hint: write a function for this and call it right after displaying the result)
+
+9. Be careful: after Task 8, the game literally never ends. So include the option to quit the game if the user writes 'exit' instead of the answer. In this case, DON'T call the function from task 8.
+
+10. Track the user's score to make the game more fun! So each time an answer is correct, add 1 point to the score (Hint: I'm going to use the power of closures for this, but you don't have to, just do this with the tools you feel more comfortable at this point).
+
+11. Display the score in the console. Use yet another method for this.
 */
-
-//==============================================================
-
-// Primitives vs objects
-
-/*
-Primitives -> hold data within that Object
-Object -> reference in memory where the data is held
-*/
-
-var a = 23;
-var b = a;
-a = 46;
-console.log('a: ' + a); // 46
-console.log('b: ' + b); // 23
-
-var c = {
-    name: 'john',
-    age: 26
-};
-var d = c;
-c.name = 'jane';
-console.log('c: ' + c.name); // jane
-console.log('d: ' + d.name); // jane
-
-// functions
-
-var age = 27;
-var jonas = {
-    name: 'jonas',
-    city: 'lisbon'
-}
-
-function change(a,b){
-    a = 30;
-    b.city = 'toronto'
-}
-
-change(age, jonas);
-console.log(age); // 27
-console.log(jonas); // {name: "jonas", city: "toronto"}
-age = 30;
-console.log(age); // 30
-
-
-var e = [1,2,3];
-var f = e;
-console.log('e: ' + e);
-console.log('f: ' + f);
-e[0] = 5;
-console.log('e: ' + e);
-console.log('f: ' + f);
